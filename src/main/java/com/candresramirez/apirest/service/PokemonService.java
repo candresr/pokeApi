@@ -37,6 +37,14 @@ public class PokemonService {
     private String getRootUrl() {
         return "https://pokeapi.co/api/v2";
     }
+    
+    private HttpEntity<String> getHeaders() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("user-agent", "Application");
+		HttpEntity<String> entity = new HttpEntity<>(headers);
+		
+		return entity;
+    }
 	
 	public  ResponseGenericDTO listPokemon() {
 		try {
@@ -61,11 +69,7 @@ public class PokemonService {
 	
 	public List<ResponseListPokemon> listApi() {
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("user-agent", "Application");
-		HttpEntity<String> entity = new HttpEntity<>(headers);
-		
-		Pokemon response = restTemplate.exchange(getRootUrl() + "/pokemon?offset=0&limit=10", HttpMethod.GET, entity, Pokemon.class).getBody();
+		Pokemon response = restTemplate.exchange(getRootUrl() + "/pokemon?offset=0&limit=10", HttpMethod.GET, getHeaders(), Pokemon.class).getBody();
 		List<ResponseListPokemon> resp = new ArrayList<>();	
 		for (int i = 0; i < response.getResults().length; i++) {
 			ResponseListPokemon dto = listApi(response.getResults()[i].getName());
@@ -76,12 +80,8 @@ public class PokemonService {
 	}
 	
 	public ResponseDetailPokemon detailApi(String name) {
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("user-agent", "Application");
-		HttpEntity<String> entity = new HttpEntity<>(headers);
-		
-		DetailPokemon response = restTemplate.exchange(getRootUrl() + "/pokemon/" + name, HttpMethod.GET, entity, DetailPokemon.class).getBody();
+				
+		DetailPokemon response = restTemplate.exchange(getRootUrl() + "/pokemon/" + name, HttpMethod.GET, getHeaders(), DetailPokemon.class).getBody();
 		
 		ResponseDetailPokemon detail = new ResponseDetailPokemon();
 		detail.setName(response.getName());
@@ -95,11 +95,7 @@ public class PokemonService {
 	
 	public ResponseListPokemon listApi(String name) {
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("user-agent", "Application");
-		HttpEntity<String> entity = new HttpEntity<>(headers);
-		
-		DetailPokemon response = restTemplate.exchange(getRootUrl() + "/pokemon/" + name, HttpMethod.GET, entity, DetailPokemon.class).getBody();
+		DetailPokemon response = restTemplate.exchange(getRootUrl() + "/pokemon/" + name, HttpMethod.GET, getHeaders(), DetailPokemon.class).getBody();
 		
 		ResponseListPokemon detail = new ResponseListPokemon();
 		detail.setName(response.getName());
@@ -110,11 +106,8 @@ public class PokemonService {
 	}
 	
 	public Object characteristicApi(Integer id) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("user-agent", "Application");
-		HttpEntity<String> entity = new HttpEntity<>(headers);
 		
-		Characteristic response = restTemplate.exchange(getRootUrl() + "/characteristic/" + id, HttpMethod.GET, entity, Characteristic.class).getBody();
+		Characteristic response = restTemplate.exchange(getRootUrl() + "/characteristic/" + id, HttpMethod.GET, getHeaders(), Characteristic.class).getBody();
 		
 		return response.getDescriptions()[0];
 	}
@@ -129,21 +122,15 @@ public class PokemonService {
 	}
 	
 	public EvolutionTriggers evolutiontriggerApi(Integer id) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("user-agent", "Application");
-		HttpEntity<String> entity = new HttpEntity<>(headers);
 		
-		EvolutionTriggers evolutiontrigger = restTemplate.exchange(getRootUrl() + "/evolution-trigger/" + id, HttpMethod.GET, entity, EvolutionTriggers.class).getBody();
+		EvolutionTriggers evolutiontrigger = restTemplate.exchange(getRootUrl() + "/evolution-trigger/" + id, HttpMethod.GET, getHeaders(), EvolutionTriggers.class).getBody();
 		
 		return evolutiontrigger;
 	}
 	
 	public EvolutionChains evolutionchainApi(Integer id) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("user-agent", "Application");
-		HttpEntity<String> entity = new HttpEntity<>(headers);
 		
-		EvolutionChains evolutiontrigger = restTemplate.exchange(getRootUrl() + "/evolution-chain/" + id, HttpMethod.GET, entity, EvolutionChains.class).getBody();
+		EvolutionChains evolutiontrigger = restTemplate.exchange(getRootUrl() + "/evolution-chain/" + id, HttpMethod.GET, getHeaders(), EvolutionChains.class).getBody();
 		
 		return evolutiontrigger;
 	}
